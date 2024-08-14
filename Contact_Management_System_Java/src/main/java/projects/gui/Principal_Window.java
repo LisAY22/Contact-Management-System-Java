@@ -31,7 +31,7 @@ public class Principal_Window extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(146, 129, 122));
+        jPanel1.setBackground(new java.awt.Color(245, 238, 158));
 
         jLabel1.setFont(new java.awt.Font("Showcard Gothic", 0, 30)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -86,14 +86,14 @@ public class Principal_Window extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(82, 82, 82))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(149, 149, 149)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(138, 138, 138)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(View_jButton)
                     .addComponent(Edit_jButton))
-                .addGap(49, 49, 49)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Add_jButton)
-                    .addComponent(Delete_jButton))
+                .addGap(76, 76, 76)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(Delete_jButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Add_jButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -101,11 +101,11 @@ public class Principal_Window extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(46, 46, 46)
                 .addComponent(jLabel1)
-                .addGap(35, 35, 35)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(View_jButton)
                     .addComponent(Add_jButton))
-                .addGap(47, 47, 47)
+                .addGap(64, 64, 64)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Edit_jButton)
                     .addComponent(Delete_jButton))
@@ -132,6 +132,11 @@ public class Principal_Window extends javax.swing.JFrame {
 
     private void View_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_View_jButtonActionPerformed
         // TODO add your handling code here:
+        View_Window view_screen = new View_Window();
+        view_screen.setVisible(true);
+        view_screen.setLocationRelativeTo(null);
+        
+        dispose(); 
     }//GEN-LAST:event_View_jButtonActionPerformed
 
     private void Delete_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Delete_jButtonActionPerformed
