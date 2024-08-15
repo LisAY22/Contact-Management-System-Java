@@ -1,15 +1,21 @@
 package projects.gui;
 
+import projects.sql.ConnectionDB;
+
 /**
  *
  * @author lisaj
  */
 public class Principal_Window extends javax.swing.JFrame {
-
+    
+    private ConnectionDB con;
+    
     /**
      * Creates new form Principal_Window
      */
     public Principal_Window() {
+        ConnectionDB con = new ConnectionDB();
+        con.obtainConnection();
         initComponents();
     }
 
