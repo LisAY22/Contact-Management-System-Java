@@ -1,5 +1,7 @@
 package projects.gui;
 
+import projects.sql.ConnectionDB;
+
 /**
  *
  * @author lisaj
@@ -9,7 +11,7 @@ public class Edit_Window extends javax.swing.JFrame {
     /**
      * Creates new form Edit_Window
      */
-    public Edit_Window() {
+    public Edit_Window(ConnectionDB con) {
         initComponents();
     }
 

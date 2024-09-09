@@ -1,5 +1,7 @@
 package projects.gui;
 
+import projects.sql.ConnectionDB;
+
 /**
  *
  * @author lisaj
@@ -9,7 +11,7 @@ public class View_Window extends javax.swing.JFrame {
     /**
      * Creates new form View_Window
      */
-    public View_Window() {
+    public View_Window(ConnectionDB con) {
         initComponents();
     }
 

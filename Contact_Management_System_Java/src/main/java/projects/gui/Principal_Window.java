@@ -14,7 +14,7 @@ public class Principal_Window extends javax.swing.JFrame {
      * Creates new form Principal_Window
      */
     public Principal_Window() {
-        ConnectionDB con = new ConnectionDB();
+        this.con = new ConnectionDB();
         con.obtainConnection();
         initComponents();
     }
@@ -122,7 +122,7 @@ public class Principal_Window extends javax.swing.JFrame {
 
     private void Add_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Add_jButtonActionPerformed
         // TODO add your handling code here:
-        Add_Window add_screen = new Add_Window();
+        Add_Window add_screen = new Add_Window(con);
         add_screen.setVisible(true);
         add_screen.setLocationRelativeTo(null);
         
@@ -131,7 +131,7 @@ public class Principal_Window extends javax.swing.JFrame {
 
     private void View_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_View_jButtonActionPerformed
         // TODO add your handling code here:
-        View_Window view_screen = new View_Window();
+        View_Window view_screen = new View_Window(con);
         view_screen.setVisible(true);
         view_screen.setLocationRelativeTo(null);
         
@@ -140,7 +140,7 @@ public class Principal_Window extends javax.swing.JFrame {
 
     private void Edit_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Edit_jButtonActionPerformed
         // TODO add your handling code here:
-        Edit_Window edit_screen = new Edit_Window();
+        Edit_Window edit_screen = new Edit_Window(con);
         edit_screen.setVisible(true);
         edit_screen.setLocationRelativeTo(null);
 

@@ -3,6 +3,7 @@ package projects.sql;
 // java.sql is the Java standard library that contains the interfaces and classes to connect to databases and execute SQL queries.
 import java.sql.Connection;         // This imports the Connection interface, which represents a connection to a database. 
 import java.sql.DriverManager;      // This imports the DriverManager class, which manages a list of database drivers and is used to establish a connection to a database.
+import java.sql.PreparedStatement;
 import java.sql.SQLException;       // This imports the SQLException class, which is used to handle any SQL-related errors that occur during database interactions.
 
 /**
@@ -24,4 +25,24 @@ public class ConnectionDB {
         }
         return con;
     }
+    
+    public boolean addContact (String name, String phone_number, String email_address, String address) throws SQLException {
+        // Define a string, this will be the query
+        // The question marks (?) are placeholders for the values ​​to be inserted.
+        String query = "INSERT INTO Contact(Name, Phone_Number, Email_Address, Adress) VALUES (?, ?, ?, ?)";
+        // PreparedStatement: Class that represents a precompiled SQL query.
+        PreparedStatement pstmt = con.prepareStatement(query);
+            
+        // Set values for the placeholders (?)
+        pstmt.setString(1, name);
+        pstmt.setString(2, phone_number);
+        pstmt.setString(3, email_address);
+        pstmt.setString(4, address);
+            
+        // Runs the SQL query and returns the number of rows affected
+        int rowsInserted = pstmt.executeUpdate();
+            
+        return rowsInserted > 0;
+    }
+    
 }

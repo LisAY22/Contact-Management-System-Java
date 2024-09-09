@@ -1,15 +1,20 @@
 package projects.gui;
 
+import java.sql.SQLException;
+import projects.sql.ConnectionDB;
+
 /**
  *
  * @author lisaj
  */
 public class Add_Window extends javax.swing.JFrame {
-
+    private ConnectionDB con; 
     /**
      * Creates new form Add_Window
      */
-    public Add_Window() {
+    public Add_Window(ConnectionDB con) {
+        this.con = con; 
+        
         initComponents();
     }
 
@@ -32,7 +37,7 @@ public class Add_Window extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         EmailAdress_jTextField = new javax.swing.JTextField();
-        Name_jTextField1 = new javax.swing.JTextField();
+        Name_jTextField = new javax.swing.JTextField();
         PhoneNumber_jTextField = new javax.swing.JTextField();
         Address_jTextField = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
@@ -95,25 +100,10 @@ public class Add_Window extends javax.swing.JFrame {
         jLabel5.setText("ADDRESS");
 
         EmailAdress_jTextField.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 18)); // NOI18N
-        EmailAdress_jTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EmailAdress_jTextFieldActionPerformed(evt);
-            }
-        });
 
-        Name_jTextField1.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 18)); // NOI18N
-        Name_jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Name_jTextField1ActionPerformed(evt);
-            }
-        });
+        Name_jTextField.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 18)); // NOI18N
 
         PhoneNumber_jTextField.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 18)); // NOI18N
-        PhoneNumber_jTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PhoneNumber_jTextFieldActionPerformed(evt);
-            }
-        });
 
         Address_jTextField.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 18)); // NOI18N
 
@@ -130,7 +120,7 @@ public class Add_Window extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Name_jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Name_jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(PhoneNumber_jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(EmailAdress_jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Address_jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -142,7 +132,7 @@ public class Add_Window extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(Name_jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Name_jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -221,7 +211,6 @@ public class Add_Window extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void back_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_jButtonActionPerformed
-        // TODO add your handling code here:
         Principal_Window screen = new Principal_Window();
         screen.setVisible(true);
         screen.setLocationRelativeTo(null);
@@ -229,27 +218,35 @@ public class Add_Window extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_back_jButtonActionPerformed
 
-    private void Name_jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Name_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Name_jTextField1ActionPerformed
-
-    private void PhoneNumber_jTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PhoneNumber_jTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_PhoneNumber_jTextFieldActionPerformed
-
-    private void EmailAdress_jTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmailAdress_jTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_EmailAdress_jTextFieldActionPerformed
-
     private void Save_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Save_jButtonActionPerformed
-        // TODO add your handling code here:
+        String name = Name_jTextField.getText();
+        String phone_number = PhoneNumber_jTextField.getText();
+        String email_address = EmailAdress_jTextField.getText();
+        String address = Address_jTextField.getText();
+        
+        if (name.isEmpty()) {
+            System.out.println("ERROR: Your contact must have a name");
+            return;
+        }
+        
+        try {
+            boolean addContact = con.addContact(name, phone_number, email_address, address);
+            if (addContact) {
+                System.out.println("CONTACT SAVED");
+            } else {
+                System.out.println("ERROR");
+            }
+        }
+        catch (SQLException e){
+            System.out.println("ERROR: " + e);
+        }
     }//GEN-LAST:event_Save_jButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Address_jTextField;
     private javax.swing.JTextField EmailAdress_jTextField;
-    private javax.swing.JTextField Name_jTextField1;
+    private javax.swing.JTextField Name_jTextField;
     private javax.swing.JTextField PhoneNumber_jTextField;
     private javax.swing.JButton Save_jButton;
     private javax.swing.JButton back_jButton;
