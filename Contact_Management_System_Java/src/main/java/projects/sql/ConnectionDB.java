@@ -43,6 +43,42 @@ public class ConnectionDB {
         }
     }
     
+    public ResultSet searchContact(String name_id) {
+        String query;
+
+        boolean isId = false;
+        int id = 0;
+
+        // Check if the input can be parsed as an integer
+        try {
+            id = Integer.parseInt(name_id);
+            isId = true;
+        } catch (NumberFormatException e) {
+            // Input is not an integer, so it must be a name
+            isId = false;
+        }
+
+        if (isId) {
+            query = "SELECT * FROM Contact WHERE ID_Contact = ?";
+        } else {
+            query = "SELECT * FROM Contact WHERE Name = ?";
+        }
+
+        try {
+            PreparedStatement pstmt = con.prepareStatement(query);
+            if (isId) {
+                pstmt.setInt(1, id);
+            } else {
+                pstmt.setString(1, name_id);
+            }
+            return pstmt.executeQuery();
+        } catch (SQLException e) {
+            System.out.println("ERROR: " + e.getMessage());
+            return null;
+        }
+    }
+
+    
     public void addContact (String name, String phone_number, String email_address, String address) {
         try {
             // Define a string, this will be the query
@@ -59,6 +95,30 @@ public class ConnectionDB {
 
             // executeUpdate() is used for INSERT, UPDATE, or DELETE queries. 
             // This method returns an integer representing the number of rows affected by the operation
+            int rowsInserted = pstmt.executeUpdate();
+            
+            if (rowsInserted > 0) {
+                System.out.println("CONTACT SAVED");
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }            
+    }
+    
+    public void updateContact (int id, String name, String phone_number, String email_address, String address) {
+        try {
+            String query = "UPDATE Contact SET Name = ?, Phone_Number = ?, Email_Address = ?, Adress = ? "
+                    + "WHERE ID_Contact = ?";
+            PreparedStatement pstmt = con.prepareStatement(query);
+
+            // Set values for the placeholders (?)
+            pstmt.setString(1, name);
+            pstmt.setString(2, phone_number);
+            pstmt.setString(3, email_address);
+            pstmt.setString(4, address);
+            pstmt.setInt(5, id);
+
             int rowsInserted = pstmt.executeUpdate();
             
             if (rowsInserted > 0) {

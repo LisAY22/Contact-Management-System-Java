@@ -1,5 +1,7 @@
 package projects.gui;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import projects.sql.ConnectionDB;
 
 /**
@@ -7,12 +9,15 @@ import projects.sql.ConnectionDB;
  * @author lisaj
  */
 public class Edit_Window extends javax.swing.JFrame {
-
+    private ConnectionDB con; 
+    private int ID;
     /**
      * Creates new form Edit_Window
      */
     public Edit_Window(ConnectionDB con) {
+        this.con = con;
         initComponents();
+        limpiar();
     }
 
     /**
@@ -99,27 +104,16 @@ public class Edit_Window extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jLabel5.setText("ADDRESS");
 
+        EmailAdress_jTextField.setEditable(false);
         EmailAdress_jTextField.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 18)); // NOI18N
-        EmailAdress_jTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EmailAdress_jTextFieldActionPerformed(evt);
-            }
-        });
 
+        Name_jTextField1.setEditable(false);
         Name_jTextField1.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 18)); // NOI18N
-        Name_jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Name_jTextField1ActionPerformed(evt);
-            }
-        });
 
+        PhoneNumber_jTextField.setEditable(false);
         PhoneNumber_jTextField.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 18)); // NOI18N
-        PhoneNumber_jTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PhoneNumber_jTextFieldActionPerformed(evt);
-            }
-        });
 
+        Address_jTextField.setEditable(false);
         Address_jTextField.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 18)); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -202,16 +196,15 @@ public class Edit_Window extends javax.swing.JFrame {
 
         jPanel5.setBackground(new java.awt.Color(245, 238, 158));
 
-        Buscar_jTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Buscar_jTextFieldActionPerformed(evt);
-            }
-        });
-
         Search_jButton1.setBackground(new java.awt.Color(62, 86, 65));
         Search_jButton1.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 14)); // NOI18N
         Search_jButton1.setForeground(new java.awt.Color(255, 255, 255));
         Search_jButton1.setText("SEARCH");
+        Search_jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Search_jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jLabel6.setText("ID/NAME");
@@ -291,26 +284,72 @@ public class Edit_Window extends javax.swing.JFrame {
 
         dispose();
     }//GEN-LAST:event_back_jButtonActionPerformed
-
-    private void EmailAdress_jTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmailAdress_jTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_EmailAdress_jTextFieldActionPerformed
-
-    private void Name_jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Name_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Name_jTextField1ActionPerformed
-
-    private void PhoneNumber_jTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PhoneNumber_jTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_PhoneNumber_jTextFieldActionPerformed
-
+    
+    private void limpiar() {
+        Name_jTextField1.setText("");
+        PhoneNumber_jTextField.setText("");
+        EmailAdress_jTextField.setText("");
+        Address_jTextField.setText("");
+    } 
+    
+    private void enable_textfield() {
+        Name_jTextField1.setEditable(true);
+        PhoneNumber_jTextField.setEditable(true);
+        EmailAdress_jTextField.setEditable(true);
+        Address_jTextField.setEditable(true);
+    }
+  
+    private void disable_textfield() {
+        Name_jTextField1.setEditable(false);
+        PhoneNumber_jTextField.setEditable(false);
+        EmailAdress_jTextField.setEditable(false);
+        Address_jTextField.setEditable(false);
+    }
+    
     private void Save_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Save_jButtonActionPerformed
-        // TODO add your handling code here:
+        String name = Name_jTextField1.getText();
+        String phone_number = PhoneNumber_jTextField.getText();
+        String email_address = EmailAdress_jTextField.getText();
+        String address = Address_jTextField.getText();
+        
+        if (name.isEmpty()) {
+            System.out.println("ERROR: Your contact must have a name");
+            return;
+        }
+        
+        con.updateContact(ID, name, phone_number, email_address, address);
+        limpiar();
+        disable_textfield();
     }//GEN-LAST:event_Save_jButtonActionPerformed
 
-    private void Buscar_jTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Buscar_jTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Buscar_jTextFieldActionPerformed
+    private void Search_jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Search_jButton1ActionPerformed
+        try {
+            String name_id = Buscar_jTextField.getText();
+            ResultSet contact = con.searchContact(name_id);
+            
+            if (!contact.next()){
+                System.out.println("ERROR: This contact doesn't exist");
+                return;
+            }
+            
+            while (contact.next()) {
+                    String name = contact.getString("Name"); 
+                    String phoneNumber = contact.getString("Phone_Number"); 
+                    String email = contact.getString("Email_Address"); 
+                    String address = contact.getString("Adress"); 
+                    ID = contact.getInt("ID_Contact");
+                    
+                    Name_jTextField1.setText(name);
+                    PhoneNumber_jTextField.setText(phoneNumber);
+                    EmailAdress_jTextField.setText(email);
+                    Address_jTextField.setText(address);
+            }
+            enable_textfield();
+        }
+        catch (SQLException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }     
+    }//GEN-LAST:event_Search_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Address_jTextField;
