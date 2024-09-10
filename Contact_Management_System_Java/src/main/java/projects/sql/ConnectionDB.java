@@ -4,6 +4,7 @@ package projects.sql;
 import java.sql.Connection;         // This imports the Connection interface, which represents a connection to a database. 
 import java.sql.DriverManager;      // This imports the DriverManager class, which manages a list of database drivers and is used to establish a connection to a database.
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;       // This imports the SQLException class, which is used to handle any SQL-related errors that occur during database interactions.
 
 /**
@@ -26,23 +27,47 @@ public class ConnectionDB {
         return con;
     }
     
-    public boolean addContact (String name, String phone_number, String email_address, String address) throws SQLException {
-        // Define a string, this will be the query
-        // The question marks (?) are placeholders for the values ​​to be inserted.
-        String query = "INSERT INTO Contact(Name, Phone_Number, Email_Address, Adress) VALUES (?, ?, ?, ?)";
-        // PreparedStatement: Class that represents a precompiled SQL query.
-        PreparedStatement pstmt = con.prepareStatement(query);
+    public ResultSet contacts() {
+        try {
+            String query = "SELECT * FROM Contact";
+            PreparedStatement pstmt = con.prepareStatement(query);
             
-        // Set values for the placeholders (?)
-        pstmt.setString(1, name);
-        pstmt.setString(2, phone_number);
-        pstmt.setString(3, email_address);
-        pstmt.setString(4, address);
+            // executeQuery() is used for SELECT queries. 
+            // It returns a ResultSet object that holds the results of the query.
+            return pstmt.executeQuery();
+        }
+        catch (SQLException e) {
+            System.out.println("ERROR: " + e.getMessage());
             
-        // Runs the SQL query and returns the number of rows affected
-        int rowsInserted = pstmt.executeUpdate();
+            return null;
+        }
+    }
+    
+    public void addContact (String name, String phone_number, String email_address, String address) {
+        try {
+            // Define a string, this will be the query
+            // The question marks (?) are placeholders for the values ​​to be inserted.
+            String query = "INSERT INTO Contact(Name, Phone_Number, Email_Address, Adress) VALUES (?, ?, ?, ?)";
+            // PreparedStatement: Class that represents a precompiled SQL query.
+            PreparedStatement pstmt = con.prepareStatement(query);
+
+            // Set values for the placeholders (?)
+            pstmt.setString(1, name);
+            pstmt.setString(2, phone_number);
+            pstmt.setString(3, email_address);
+            pstmt.setString(4, address);
+
+            // executeUpdate() is used for INSERT, UPDATE, or DELETE queries. 
+            // This method returns an integer representing the number of rows affected by the operation
+            int rowsInserted = pstmt.executeUpdate();
             
-        return rowsInserted > 0;
+            if (rowsInserted > 0) {
+                System.out.println("CONTACT SAVED");
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }            
     }
     
 }

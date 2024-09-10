@@ -1,5 +1,7 @@
 package projects.gui;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import projects.sql.ConnectionDB;
 
 /**
@@ -7,12 +9,14 @@ import projects.sql.ConnectionDB;
  * @author lisaj
  */
 public class View_Window extends javax.swing.JFrame {
-
+    private ConnectionDB con; 
     /**
      * Creates new form View_Window
      */
     public View_Window(ConnectionDB con) {
+        this.con = con;
         initComponents();
+        fill_table();
     }
 
     /**
@@ -158,6 +162,37 @@ public class View_Window extends javax.swing.JFrame {
         
         dispose();
     }//GEN-LAST:event_back_jButtonActionPerformed
+
+    private void fill_table() {
+        try {
+            // Retrieve the result set from the contacts method
+            ResultSet contact = con.contacts();
+
+            // Get the table's model
+            // getModel(): This method belongs to the JTable class and returns the table's data model, which is an instance of the TableModel interface.
+            javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) Information_jTable.getModel();
+
+            // Clear any existing rows in the table 
+            // This method sets the number of rows in the table model to 0.
+            model.setRowCount(0);
+
+            // Iterate over the result set
+            // ResultSet.next(): This method moves the cursor to the next row in the result set. It returns true if the row exists, and false when there are no more rows.
+            while (contact.next()) {
+                int id = contact.getInt("ID_Contact"); 
+                String name = contact.getString("Name"); 
+                String phoneNumber = contact.getString("Phone_Number"); 
+                String email = contact.getString("Email_Address"); 
+                String address = contact.getString("Adress"); 
+
+                // Create a row and add it to the table model
+                model.addRow(new Object[]{id, name, phoneNumber, email, address});
+            }
+        } 
+        catch (SQLException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane Information_jScrollPane;

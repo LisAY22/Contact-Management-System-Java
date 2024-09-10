@@ -1,6 +1,5 @@
 package projects.gui;
 
-import java.sql.SQLException;
 import projects.sql.ConnectionDB;
 
 /**
@@ -218,6 +217,13 @@ public class Add_Window extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_back_jButtonActionPerformed
 
+    private void limpiar() {
+        Name_jTextField.setText("");
+        PhoneNumber_jTextField.setText("");
+        EmailAdress_jTextField.setText("");
+        Address_jTextField.setText("");
+    } 
+    
     private void Save_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Save_jButtonActionPerformed
         String name = Name_jTextField.getText();
         String phone_number = PhoneNumber_jTextField.getText();
@@ -229,17 +235,8 @@ public class Add_Window extends javax.swing.JFrame {
             return;
         }
         
-        try {
-            boolean addContact = con.addContact(name, phone_number, email_address, address);
-            if (addContact) {
-                System.out.println("CONTACT SAVED");
-            } else {
-                System.out.println("ERROR");
-            }
-        }
-        catch (SQLException e){
-            System.out.println("ERROR: " + e);
-        }
+        con.addContact(name, phone_number, email_address, address);
+        limpiar();
     }//GEN-LAST:event_Save_jButtonActionPerformed
 
 
