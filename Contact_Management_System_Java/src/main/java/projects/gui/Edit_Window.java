@@ -173,6 +173,11 @@ public class Edit_Window extends javax.swing.JFrame {
         Delete_jButton.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 14)); // NOI18N
         Delete_jButton.setForeground(new java.awt.Color(255, 255, 255));
         Delete_jButton.setText("DELETE");
+        Delete_jButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Delete_jButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -327,29 +332,35 @@ public class Edit_Window extends javax.swing.JFrame {
             String name_id = Buscar_jTextField.getText();
             ResultSet contact = con.searchContact(name_id);
             
-            if (!contact.next()){
+            if (contact != null && contact.next()) {
+                String name = contact.getString("Name"); 
+                String phoneNumber = contact.getString("Phone_Number"); 
+                String email = contact.getString("Email_Address"); 
+                String address = contact.getString("Adress"); 
+                ID = contact.getInt("ID_Contact");
+                
+                Name_jTextField1.setText(name);
+                PhoneNumber_jTextField.setText(phoneNumber);
+                EmailAdress_jTextField.setText(email);
+                Address_jTextField.setText(address);
+
+                enable_textfield();
+            } else {
                 System.out.println("ERROR: This contact doesn't exist");
-                return;
             }
             
-            while (contact.next()) {
-                    String name = contact.getString("Name"); 
-                    String phoneNumber = contact.getString("Phone_Number"); 
-                    String email = contact.getString("Email_Address"); 
-                    String address = contact.getString("Adress"); 
-                    ID = contact.getInt("ID_Contact");
-                    
-                    Name_jTextField1.setText(name);
-                    PhoneNumber_jTextField.setText(phoneNumber);
-                    EmailAdress_jTextField.setText(email);
-                    Address_jTextField.setText(address);
-            }
-            enable_textfield();
         }
         catch (SQLException e) {
             System.out.println("ERROR: " + e.getMessage());
         }     
     }//GEN-LAST:event_Search_jButton1ActionPerformed
+
+    private void Delete_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Delete_jButtonActionPerformed
+        // TODO add your handling code here:
+        con.deleteContact(ID);
+        limpiar();
+        disable_textfield();
+    }//GEN-LAST:event_Delete_jButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Address_jTextField;

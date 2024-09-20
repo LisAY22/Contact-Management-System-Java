@@ -130,4 +130,22 @@ public class ConnectionDB {
         }            
     }
     
+    public void deleteContact (int id) {
+        try {
+            String query = "DELETE FROM Contact Where ID_Contact = ?";
+            PreparedStatement pstmt = con.prepareStatement(query);
+            
+            pstmt.setInt(1, id);
+            
+            int rowsInserted = pstmt.executeUpdate();
+            
+            if (rowsInserted > 0) {
+                System.out.println("CONTACT DELETED");
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+    
 }
